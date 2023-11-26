@@ -1,0 +1,32 @@
+name: Code Analysis
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  analyze_code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        . venv/bin/activate
+        pip install --upgrade pip
+        pip install pylint-json2html
+
+    - name: Run Code Analysis
+      run: |
+        source venv/bin/activate
+        export PATH="$PATH:$(pwd)/venv/bin"
+        python code_analysis.py
